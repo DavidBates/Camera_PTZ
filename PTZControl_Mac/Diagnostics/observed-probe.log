@@ -1,0 +1,9 @@
+[USB] enumerate IOReturn=0x00000000
+[USB] VID=2109 PID=0813 location=02200000 registry=4295684058 name=USB3.0 Hub
+[USB] VID=0bda PID=8153 location=02220000 registry=4295684082 name=USB 10_100_1000 LAN
+[USB] VID=2109 PID=2813 location=02100000 registry=4295684112 name=USB2.0 Hub
+[USB] VID=046d PID=0848 location=02130000 registry=4295684129 name=ConferenceCam CC3000e Camera
+[USB] VID=18d1 PID=8001 location=02140000 registry=4295684170 name=Hangouts Meet speakermic
+[USB] CreatePlugIn registry=4295684129 IOReturn=0xe00002be
+[PTZ 2026-09-17T19:38:41Z] Connect ConferenceCam CC3000e Camera VID=046D PID=0848 location=02130000 registry=4295684129
+DIAGNOSTIC ERROR: Cannot create USB user client; see console IOReturn and USB entitlement

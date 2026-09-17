@@ -1,0 +1,328 @@
+PASS: camera terminal, processing unit, and extension unit parsed
+PASS: wire GUID byte order
+PASS: nonzero VideoControl interface retained
+PASS: reject zero length descriptor
+PASS: reject truncated XU
+[PTZ 2026-09-17T21:22:39Z] Connect CC3000e test fixture VID=046D PID=0848 location=00000001 registry=1
+[PTZ 2026-09-17T21:22:39Z] descriptor @0: 09 02 47 00 01 01 00 80 32
+[PTZ 2026-09-17T21:22:39Z] descriptor @9: 09 04 02 00 00 0E 01 00 00
+[PTZ 2026-09-17T21:22:39Z] Interface 2 alt=0 class=14 subclass=1
+[PTZ 2026-09-17T21:22:39Z] descriptor @18: 12 24 02 03 01 02 00 00 00 00 00 00 00 00 03 00 1A 00
+[PTZ 2026-09-17T21:22:39Z] Input terminal 3 type=0x0201
+[PTZ 2026-09-17T21:22:39Z] Entity 3 interface=2 bmControls=00 1A 00 supported bits=[9, 11, 12]
+[PTZ 2026-09-17T21:22:39Z] descriptor @36: 09 24 05 04 03 00 00 01 01
+[PTZ 2026-09-17T21:22:39Z] Processing unit 4 source=3
+[PTZ 2026-09-17T21:22:39Z] Entity 4 interface=2 bmControls=01 supported bits=[0]
+[PTZ 2026-09-17T21:22:39Z] descriptor @45: 1A 24 06 09 21 2D E5 FF 30 80 2C 4E 82 D9 F5 87 D0 05 40 BD 02 01 04 01 03 00
+[PTZ 2026-09-17T21:22:39Z] XU 9 GUID(wire)=21 2D E5 FF 30 80 2C 4E 82 D9 F5 87 D0 05 40 BD controls=2 sources=04
+[PTZ 2026-09-17T21:22:39Z] XU 9 advertised selectors=[1, 2]
+[PTZ 2026-09-17T21:22:39Z] Entity 9 interface=2 bmControls=03 supported bits=[0, 1]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0B00 wIndex=0302 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0E00 wIndex=0302 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0D00 wIndex=0302 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[F0 F1 FF FF F0 F1 FF FF]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[10 0E 00 00 10 0E 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[64 00 00 00 64 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0100 wIndex=0902 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=85 wValue=0100 wIndex=0902 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[04 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0200 wIndex=0902 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=85 wValue=0200 wIndex=0902 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[01 00]
+[PTZ 2026-09-17T21:22:39Z] Capabilities zoom=true relativePT=true absolutePT=true LogitechStep=true LogitechReset=true
+[PTZ 2026-09-17T21:22:39Z] No capture session, device seize, interface claim, configuration change, or startup movement performed.
+PASS: connect and probing never move camera
+PASS: entity high byte / interface low byte
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0B00 wIndex=0302 wLength=2 OUT=[69 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[69 00]
+[PTZ 2026-09-17T21:22:39Z] Zoom readback=105 target=105
+PASS: zoom increments by advertised resolution
+PASS: standard zoom SET_CUR packet
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0B00 wIndex=0302 wLength=2 OUT=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] Zoom readback=200 target=200
+PASS: zoom clamps at upper bound
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[C8]
+PASS: short reads fail
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[01 01 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+PASS: relative pan pulse followed by stop
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 01 01]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0xE00002ED actual=0 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+PASS: motion failure surfaced
+PASS: stop attempted after failed movement SET
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0100 wIndex=0902 wLength=4 OUT=[FF FE 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+PASS: Logitech XU step payload and discovered unit
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0200 wIndex=0902 wLength=1 OUT=[03]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0B00 wIndex=0302 wLength=2 OUT=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[]
+PASS: home XU uses one byte
+PASS: 19 zoom stops map to half-x spacing
+PASS: buttons use adjacent slider stops from an off-notch zoom
+PASS: zoom stops respect hardware resolution
+PASS: zoom target clamps without off-grid upper bound
+PASS: fixed zoom range produces one stop
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0B00 wIndex=0302 wLength=2 OUT=[69 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[69 00]
+[PTZ 2026-09-17T21:22:39Z] Zoom readback=105 target=105
+PASS: arbitrary zoom targets quantize to device resolution
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[69 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0B00 wIndex=0302 wLength=2 OUT=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] Zoom readback=200 target=200
+PASS: arbitrary zoom target clamps to device maximum
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0200 wIndex=0902 wLength=1 OUT=[04]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] Hardware preset 1 SAVE accepted; recall still requires physical verification
+PASS: experimental CC3000e save slot 1 uses one-byte 04
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0200 wIndex=0902 wLength=1 OUT=[0C]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] Hardware preset 1 RECALL accepted
+PASS: experimental CC3000e recall slot 1 uses one-byte 0C
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] Saved software preset 8 for this USB location
+PASS: CC3000e does not guess hardware preset support
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[F0 F1 FF FF F0 F1 FF FF]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[10 0E 00 00 10 0E 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0D00 wIndex=0302 wLength=8 OUT=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0B00 wIndex=0302 wLength=2 OUT=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[]
+PASS: software preset restores absolute position
+[PTZ 2026-09-17T21:22:39Z] Connect CC3000e test fixture VID=046D PID=0848 location=00000001 registry=1
+[PTZ 2026-09-17T21:22:39Z] descriptor @0: 09 02 47 00 01 01 00 80 32
+[PTZ 2026-09-17T21:22:39Z] descriptor @9: 09 04 02 00 00 0E 01 00 00
+[PTZ 2026-09-17T21:22:39Z] Interface 2 alt=0 class=14 subclass=1
+[PTZ 2026-09-17T21:22:39Z] descriptor @18: 12 24 02 03 01 02 00 00 00 00 00 00 00 00 03 00 00 00
+[PTZ 2026-09-17T21:22:39Z] Input terminal 3 type=0x0201
+[PTZ 2026-09-17T21:22:39Z] Entity 3 interface=2 bmControls=00 00 00 supported bits=[]
+[PTZ 2026-09-17T21:22:39Z] descriptor @36: 09 24 05 04 03 00 00 01 01
+[PTZ 2026-09-17T21:22:39Z] Processing unit 4 source=3
+[PTZ 2026-09-17T21:22:39Z] Entity 4 interface=2 bmControls=01 supported bits=[0]
+[PTZ 2026-09-17T21:22:39Z] descriptor @45: 1A 24 06 09 21 2D E5 FF 30 80 2C 4E 82 D9 F5 87 D0 05 40 BD 02 01 04 01 03 00
+[PTZ 2026-09-17T21:22:39Z] XU 9 GUID(wire)=21 2D E5 FF 30 80 2C 4E 82 D9 F5 87 D0 05 40 BD controls=2 sources=04
+[PTZ 2026-09-17T21:22:39Z] XU 9 advertised selectors=[1, 2]
+[PTZ 2026-09-17T21:22:39Z] Entity 9 interface=2 bmControls=03 supported bits=[0, 1]
+[PTZ 2026-09-17T21:22:39Z] Not advertised: entity 3 selector 11
+[PTZ 2026-09-17T21:22:39Z] Not advertised: entity 3 selector 14
+[PTZ 2026-09-17T21:22:39Z] Not advertised: entity 3 selector 13
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0100 wIndex=0902 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=85 wValue=0100 wIndex=0902 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[04 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0200 wIndex=0902 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=85 wValue=0200 wIndex=0902 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[01 00]
+[PTZ 2026-09-17T21:22:39Z] Capabilities zoom=false relativePT=false absolutePT=false LogitechStep=true LogitechReset=true
+[PTZ 2026-09-17T21:22:39Z] No capture session, device seize, interface claim, configuration change, or startup movement performed.
+PASS: unadvertised CT controls are not probed
+PASS: unsupported zoom rejected
+[PTZ 2026-09-17T21:22:39Z] Connect CC3000e test fixture VID=046D PID=0848 location=00000001 registry=1
+[PTZ 2026-09-17T21:22:39Z] descriptor @0: 09 02 47 00 01 01 00 80 32
+[PTZ 2026-09-17T21:22:39Z] descriptor @9: 09 04 02 00 00 0E 01 00 00
+[PTZ 2026-09-17T21:22:39Z] Interface 2 alt=0 class=14 subclass=1
+[PTZ 2026-09-17T21:22:39Z] descriptor @18: 12 24 02 03 01 02 00 00 00 00 00 00 00 00 03 00 1A 00
+[PTZ 2026-09-17T21:22:39Z] Input terminal 3 type=0x0201
+[PTZ 2026-09-17T21:22:39Z] Entity 3 interface=2 bmControls=00 1A 00 supported bits=[9, 11, 12]
+[PTZ 2026-09-17T21:22:39Z] descriptor @36: 09 24 05 04 03 00 00 01 01
+[PTZ 2026-09-17T21:22:39Z] Processing unit 4 source=3
+[PTZ 2026-09-17T21:22:39Z] Entity 4 interface=2 bmControls=01 supported bits=[0]
+[PTZ 2026-09-17T21:22:39Z] descriptor @45: 1A 24 06 09 21 2D E5 FF 30 80 2C 4E 82 D9 F5 87 D0 05 40 BD 02 01 04 01 03 00
+[PTZ 2026-09-17T21:22:39Z] XU 9 GUID(wire)=21 2D E5 FF 30 80 2C 4E 82 D9 F5 87 D0 05 40 BD controls=2 sources=04
+[PTZ 2026-09-17T21:22:39Z] XU 9 advertised selectors=[1, 2]
+[PTZ 2026-09-17T21:22:39Z] Entity 9 interface=2 bmControls=03 supported bits=[0, 1]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0B00 wIndex=0302 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[0A 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[C8 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[05 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0E00 wIndex=0302 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0D00 wIndex=0302 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=81 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[F0 F1 FF FF F0 F1 FF FF]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[10 0E 00 00 10 0E 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=84 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[64 00 00 00 64 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=82 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=83 wValue=0E00 wIndex=0302 wLength=4 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[00 01 00 01]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0100 wIndex=0902 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=85 wValue=0100 wIndex=0902 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[04 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=86 wValue=0200 wIndex=0902 wLength=1 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=1 elapsed=0.000s IN=[03]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=85 wValue=0200 wIndex=0902 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[04 00]
+[PTZ 2026-09-17T21:22:39Z] Unsupported XU payload length 4, expected 1
+[PTZ 2026-09-17T21:22:39Z] Capabilities zoom=true relativePT=true absolutePT=true LogitechStep=true LogitechReset=false
+[PTZ 2026-09-17T21:22:39Z] No capture session, device seize, interface claim, configuration change, or startup movement performed.
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0E00 wIndex=0302 wLength=4 OUT=[00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=4 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0D00 wIndex=0302 wLength=8 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0D00 wIndex=0302 wLength=8 OUT=[00 00 00 00 00 00 00 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=8 elapsed=0.000s IN=[]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=A1 bRequest=87 wValue=0B00 wIndex=0302 wLength=2 OUT=[]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB bmRequestType=21 bRequest=01 wValue=0B00 wIndex=0302 wLength=2 OUT=[64 00]
+[PTZ 2026-09-17T21:22:39Z] USB IOReturn=0x00000000 actual=2 elapsed=0.000s IN=[]
+PASS: unexpected XU length never written
+Protocol tests: 0 failures
