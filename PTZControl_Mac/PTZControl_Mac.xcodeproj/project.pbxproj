@@ -255,7 +255,7 @@
                 CODE_SIGN_ENTITLEMENTS = PTZControl_Mac/PTZControlMac.entitlements;
                 SWIFT_OBJC_BRIDGING_HEADER = "PTZControl_Mac/PTZControl_Mac-Bridging-Header.h";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = LARMPUH29Z;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -272,6 +272,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+                INFOPLIST_KEY_LSUIElement = YES;
                 INFOPLIST_KEY_NSCameraUsageDescription = "Show the selected camera in the PTZ preview. Preview pauses when the window is inactive.";
 				
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -279,7 +280,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.magician.PTZControl-Mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -302,7 +303,7 @@
                 CODE_SIGN_ENTITLEMENTS = PTZControl_Mac/PTZControlMac.entitlements;
                 SWIFT_OBJC_BRIDGING_HEADER = "PTZControl_Mac/PTZControl_Mac-Bridging-Header.h";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = LARMPUH29Z;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -319,6 +320,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+                INFOPLIST_KEY_LSUIElement = YES;
                 INFOPLIST_KEY_NSCameraUsageDescription = "Show the selected camera in the PTZ preview. Preview pauses when the window is inactive.";
 				
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -326,7 +328,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.magician.PTZControl-Mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

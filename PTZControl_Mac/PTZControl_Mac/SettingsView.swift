@@ -2,11 +2,12 @@ import SwiftUI
 import AppKit
 
 struct SettingsView: View {
+    var onDone: (() -> Void)? = nil
     @EnvironmentObject var cameraController: CameraController
     @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack(spacing: 0) {
-            HStack { Text("Settings").font(.title2.bold()); Spacer(); Text("PTZ Control 1.1").foregroundStyle(.secondary).font(.caption) }.padding()
+            HStack { Text("Settings").font(.title2.bold()); Spacer(); Text("PTZ Control 1.2").foregroundStyle(.secondary).font(.caption) }.padding()
             Divider()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
@@ -88,7 +89,7 @@ struct SettingsView: View {
                 }.padding()
             }
             Divider()
-            HStack { Spacer(); Button("Done") { cameraController.saveSettings(); dismiss() }.keyboardShortcut(.defaultAction) }.padding()
+            HStack { Spacer(); Button("Done") { cameraController.saveSettings(); if let onDone { onDone() } else { dismiss() } }.keyboardShortcut(.defaultAction) }.padding()
         }.frame(width: 520, height: 660)
         .onDisappear { cameraController.saveSettings() }
     }

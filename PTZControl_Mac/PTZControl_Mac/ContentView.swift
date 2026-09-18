@@ -9,6 +9,7 @@ final class PTZViewState: ObservableObject {
     @Published var showingSettings = false
 }
 struct ContentView: View {
+    var openSettings: (() -> Void)? = nil
     @EnvironmentObject var cameraController: CameraController
     @StateObject private var state = PTZViewState()
     private var canMove: Bool { cameraController.isConnected && !cameraController.isBusy && !state.showingSettings }
@@ -21,9 +22,11 @@ struct ContentView: View {
                         .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
                 }
                 Spacer(minLength: 2)
-                Button { state.showingSettings = true } label: { Image(systemName: "gearshape") }
+                Button {
+                    if let openSettings { openSettings() } else { state.showingSettings = true }
+                } label: { Image(systemName: "gearshape") }
                     .help("Settings").accessibilityLabel("Settings")
-                Button { NSApplication.shared.terminate(nil) } label: { Image(systemName: "xmark") }
+                Button { NSApplication.shared.terminate(nil) } label: { Image(systemName: "power") }
                     .help("Quit").accessibilityLabel("Quit")
             }
             if cameraController.cameras.count > 1 {
@@ -103,7 +106,7 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in cameraController.refreshZoom() }
         .onChange(of: cameraController.selectedCameraIndex) { _, _ in state.selectedPreset = nil; state.memoryMode = false }
         .onDisappear { cameraController.stop() }
-        .onAppear { cameraController.discoverCameras() }
+        .onAppear { cameraController.refreshZoom() }
     }
     private func direction(_ image: String, _ label: String, action: @escaping () -> Void) -> some View {
         Button { state.selectedPreset = nil; action() } label: { Image(systemName: image).frame(width: 54, height: 28) }

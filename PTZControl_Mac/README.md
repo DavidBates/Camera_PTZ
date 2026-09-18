@@ -1,3 +1,28 @@
+# Menu bar update — version 1.2
+
+Authoritative project: `/Users/david.bates/Projects/GitHub/Camera_PTZ/PTZControl_Mac`.
+Built application: `Build/PTZControl_Mac.app`.
+
+Launch the app, then click the camera-and-arrows icon in the macOS menu bar.
+The controls appear in a popover; the gear button opens a separate Settings window.
+Closing Settings or clicking outside the controls leaves the menu bar app running.
+The power button quits. No Dock icon is expected. The monochrome menu icon adapts
+to the menu bar appearance; the existing full-color app icon remains unchanged.
+
+The previous mode-switching implementation closed SwiftUI-managed windows by
+scanning the application window list. That fragile path has been removed. A retained
+app delegate now owns the status item, popover and settings window. Camera discovery
+runs once on launch rather than reconnecting whenever the popover opens. Previous
+AppMode preferences are ignored; camera preferences are retained.
+
+Validation: native arm64 build succeeded and strict code-signature verification
+passed. LSUIElement is present. Desktop automation timed out, so manually verify:
+launch, open/close controls repeatedly, open Settings, close Settings with Done and
+its close button, reopen Settings, and confirm preview resumes after reopening.
+No physical preset slots were changed during this update.
+
+---
+
 # PTZControl Mac — CC3000e native backend
 
 This is a working copy of the supplied Xcode project. The original at

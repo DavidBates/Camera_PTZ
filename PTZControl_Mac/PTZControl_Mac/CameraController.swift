@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import AppKit
 
 @MainActor
 final class CameraController: ObservableObject {
@@ -27,7 +28,9 @@ final class CameraController: ObservableObject {
     private var generation = 0
     private var pendingZoom: Int?
     private var zoomRefresh: DispatchWorkItem?
-    init() { loadSettings() }
+    init() {
+        loadSettings()
+    }
     var selectedCamera: Camera? { cameras.indices.contains(selectedCameraIndex) ? cameras[selectedCameraIndex] : nil }
     var selectedCameraName: String? { selectedCamera?.name }
     var zoomStops: [Int] { currentZoom?.stops(count: zoomStopCount) ?? [] }
@@ -165,6 +168,7 @@ final class CameraController: ObservableObject {
         zoomStopCount = d.object(forKey:"ZoomStopCount") == nil ? 19 : max(2,min(91,d.integer(forKey:"ZoomStopCount")))
         experimentalHardwarePresets = d.bool(forKey:"ExperimentalHardwarePresets")
     }
+
     func saveSettings() {
         let d = UserDefaults.standard
         d.set(useLogitechMotionControl, forKey:"UseLogitechMotionControl")
