@@ -2,7 +2,9 @@
 
 Native Apple Silicon controls for the **Logitech ConferenceCam CC3000e**, right in your macOS menu bar.
 
-[Get the app](PTZControl_Mac/PTZControl_Mac.zip) · [Build & technical guide](PTZControl_Mac/README.md)
+[Download on the Mac App Store](https://apps.apple.com/app/idYOUR_APP_ID) · [Build & technical guide](PTZControl_Mac/README.md)
+
+The App Store listing is coming soon. Replace `YOUR_APP_ID` in the link above when the app is published.
 
 ## Why I built this
 
@@ -52,12 +54,20 @@ The CC3000e is the camera this project was built around and tested with. Support
 
 ## Get started
 
-1. Download and unzip the [app archive](PTZControl_Mac/PTZControl_Mac.zip), or build the project in Xcode.
+1. Download the app from the Mac App Store, or build the project in Xcode.
 2. Connect your CC3000e and launch PTZ Control.
 3. Click the camera icon in the menu bar. Allow Camera access if you want the live preview.
 4. Use the gear button to open Settings and make it your own.
 
-The included build is locally signed for testing, not a notarized release. See the [project README](PTZControl_Mac/README.md) for build instructions, permissions, diagnostics and current validation details.
+See the [project README](PTZControl_Mac/README.md) for build instructions, permissions, diagnostics and current validation details.
+
+## Privacy policy
+
+PTZ Control does not collect, store, sell, or share personal data. Camera access is used only to show the optional live preview on your Mac; the app does not upload camera video, images, audio, or camera-control data.
+
+The developer may receive aggregate, non-identifying app analytics that Apple provides through its App Store mechanisms. Any data Apple collects or processes is governed by [Apple's Privacy Policy](https://www.apple.com/legal/privacy/). PTZ Control does not use third-party analytics, advertising, tracking, or data-sharing services.
+
+For privacy questions, contact the developer through this repository's issue tracker.
 
 ## Built on shared knowledge
 
