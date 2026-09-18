@@ -1,7 +1,11 @@
-# Image controls — version 1.3
+# PTZ Control — version 1.3.1
 
-Run `Build/PTZControl_Mac 1.3.app` after quitting the older menu bar app with its power button.
-The prior app is retained in Build; the updated ZIP also contains version 1.3.
+[Project overview and screenshots](../README.md)
+
+Version 1.3.1 sizes the menu panel to its visible contents. Hiding preview or collapsing image controls reduces its height; scrolling remains available when content exceeds the screen.
+
+Run `Build/PTZControl_Mac 1.3.1.app` after quitting the older menu bar app with its power button.
+The prior app is retained in Build; the updated ZIP also contains version 1.3.1.
 All current source edits are in this project.
 
 Position presets and their experimental setting have been removed. Expand **Image controls**

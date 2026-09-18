@@ -1,0 +1,66 @@
+# PTZ Control for Mac
+
+Native Apple Silicon controls for the **Logitech ConferenceCam CC3000e**, right in your macOS menu bar.
+
+[Get the app](PTZControl_Mac/PTZControl_Mac.zip) · [Build & technical guide](PTZControl_Mac/README.md)
+
+## Why I built this
+
+I love my Logitech CC3000e. It still does exactly what I need, and I primarily use macOS. I wanted to keep using a perfectly good camera without depending on an aging Intel-only control app.
+
+The prospect of losing Logitech's app as macOS moves beyond Intel software and Rosetta was the motivation to build my own. My goal was simple: keep the camera useful long after the software it shipped with has had its day.
+
+PTZ Control is the result—a small, native Mac app that brings the controls I use into the menu bar. Pan, tilt, zoom, check the framing, and adjust the picture. Then close the panel and get back to the call.
+
+The camera has plenty of life left in it. This project is about giving it software that can keep up.
+
+## Your camera, a click away
+
+Click the camera-and-arrows icon to open the controls. The panel fits what you need: keep the live preview visible while framing a shot, or turn it off for a smaller footprint. Expand the image controls when you want to fine-tune the picture.
+
+<table>
+  <tr>
+    <th>Compact controls</th>
+    <th>Preview and image adjustments</th>
+  </tr>
+  <tr>
+    <td valign="top"><img src="overaly.png" width="280" alt="PTZ Control in light mode, with the preview hidden and compact pan, tilt and zoom controls"></td>
+    <td valign="top"><img src="overaly_dark.png" width="280" alt="PTZ Control in dark mode, with live camera preview and expanded image controls"></td>
+  </tr>
+</table>
+
+## Frame it. Focus it. Make it yours.
+
+- **Pan, tilt and zoom** from one compact panel, with Home and Stop close at hand.
+- **Choose your zoom steps.** Use the slider or plus/minus buttons, and adjust the number of stops in Settings.
+- **See the shot.** An optional live preview can pause when the panel is inactive, releasing this app's video input.
+- **Take control of focus.** Leave autofocus on, or switch it off and adjust focus manually.
+- **Tune the image.** Adjust brightness, contrast, color intensity, white balance and 50/60 Hz anti-flicker. Restore image defaults without changing your framing.
+- **Feel at home on Mac.** Light and dark appearance, a menu bar icon, and a separate settings window when you need more room.
+
+Standard and widescreen options apply to this app's preview. Your meeting app chooses its own video format.
+
+<p align="center">
+  <img src="settings.png" width="600" alt="PTZ Control Settings with preview options, adjustable zoom stops, movement preferences and image controls">
+</p>
+
+## Built for the next chapter
+
+PTZ Control is written in Swift and builds natively for **Apple Silicon**, with **macOS 14 or later** as its deployment target. It communicates with the camera through macOS USB APIs and uses Apple's video framework for the optional preview. It needs neither Rosetta nor Logitech's legacy control application.
+
+The CC3000e is the camera this project was built around and tested with. Support for other cameras isn't assumed.
+
+## Get started
+
+1. Download and unzip the [app archive](PTZControl_Mac/PTZControl_Mac.zip), or build the project in Xcode.
+2. Connect your CC3000e and launch PTZ Control.
+3. Click the camera icon in the menu bar. Allow Camera access if you want the live preview.
+4. Use the gear button to open Settings and make it your own.
+
+The included build is locally signed for testing, not a notarized release. See the [project README](PTZControl_Mac/README.md) for build instructions, permissions, diagnostics and current validation details.
+
+## Built on shared knowledge
+
+Thanks to [cameractrls](https://github.com/soyersoyer/cameractrls) and [xMRi/PTZControl](https://github.com/xMRi/PTZControl) for the open-source work that helped make sense of the camera's controls. This project implements a native macOS backend.
+
+An independent community project, unaffiliated with Logitech. See the [license](PTZControl_Mac/LICENSE).
