@@ -26,9 +26,11 @@ final class MenuBarAppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelega
         item.button?.action = #selector(toggleControls)
         popover.behavior = .transient
         popover.delegate = self
-        popover.contentViewController = NSHostingController(rootView:
+        let controls = NSHostingController(rootView:
             ContentView(openSettings: { [weak self] in self?.showSettings() })
                 .environmentObject(camera))
+        controls.sizingOptions = [.preferredContentSize]
+        popover.contentViewController = controls
         camera.discoverCameras()
     }
 

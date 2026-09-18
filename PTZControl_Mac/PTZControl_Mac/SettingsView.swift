@@ -7,7 +7,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack(spacing: 0) {
-            HStack { Text("Settings").font(.title2.bold()); Spacer(); Text("PTZ Control 1.3").foregroundStyle(.secondary).font(.caption) }.padding()
+            HStack { Text("Settings").font(.title2.bold()); Spacer(); Text("PTZ Control 1.3.1").foregroundStyle(.secondary).font(.caption) }.padding()
             Divider()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {

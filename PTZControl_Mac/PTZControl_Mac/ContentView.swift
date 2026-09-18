@@ -10,6 +10,7 @@ struct ContentView: View {
     var openSettings: (() -> Void)? = nil
     @EnvironmentObject var cameraController: CameraController
     @StateObject private var state = PTZViewState()
+    @State private var contentHeight: CGFloat = 1
     private var canMove: Bool { cameraController.isConnected && !cameraController.isBusy && !state.showingSettings }
     var body: some View {
         ScrollView {
@@ -84,8 +85,16 @@ struct ContentView: View {
             }.frame(minHeight: 32)
         }
         .padding(12).frame(width: 260)
+        .fixedSize(horizontal: false, vertical: true)
+        .background(GeometryReader { geometry in
+            Color.clear.preference(key: PanelHeightKey.self, value: geometry.size.height)
+        })
         }
-        .frame(width: 260, height: min(640, (NSScreen.main?.visibleFrame.height ?? 720) - 80))
+        .frame(width: 260, height: min(contentHeight, max(200, (NSScreen.main?.visibleFrame.height ?? 720) - 80)))
+        .onPreferenceChange(PanelHeightKey.self) { height in
+            let rounded = ceil(height)
+            if rounded > 0 && abs(contentHeight - rounded) > 0.5 { contentHeight = rounded }
+        }
         .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $state.showingSettings) { SettingsView().environmentObject(cameraController) }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in cameraController.shutdown() }
@@ -98,4 +107,9 @@ struct ContentView: View {
         Button { action() } label: { Image(systemName: image).frame(width: 54, height: 28) }
             .help(label).accessibilityLabel(label)
     }
+}
+
+private struct PanelHeightKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = max(value, nextValue()) }
 }
