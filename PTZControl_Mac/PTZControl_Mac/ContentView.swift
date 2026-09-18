@@ -4,8 +4,6 @@ import Combine
 
 @MainActor
 final class PTZViewState: ObservableObject {
-    @Published var selectedPreset: Int?
-    @Published var memoryMode = false
     @Published var showingSettings = false
 }
 struct ContentView: View {
@@ -14,6 +12,7 @@ struct ContentView: View {
     @StateObject private var state = PTZViewState()
     private var canMove: Bool { cameraController.isConnected && !cameraController.isBusy && !state.showingSettings }
     var body: some View {
+        ScrollView {
         VStack(spacing: 10) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
@@ -35,14 +34,14 @@ struct ContentView: View {
                 }.disabled(cameraController.isBusy)
             }
             if cameraController.showPreview {
-                CameraPreviewPanel(camera: cameraController.selectedCamera, enabled: true, pauseWhenInactive: cameraController.pausePreviewWhenInactive)
+                CameraPreviewPanel(camera: cameraController.selectedCamera, enabled: true, pauseWhenInactive: cameraController.pausePreviewWhenInactive, widescreen: cameraController.previewWidescreen)
             }
             VStack(spacing: 6) {
                 direction("arrow.up", "Tilt up") { cameraController.tilt(.up) }
                 HStack(spacing: 6) {
                     direction("arrow.left", "Pan left") { cameraController.pan(.left) }
                     Button {
-                        cameraController.gotoHome { ok in if ok { state.selectedPreset = nil } }
+                        cameraController.gotoHome()
                     } label: { Image(systemName: "house").frame(width: 54, height: 28) }
                         .help("Home").accessibilityLabel("Home")
                     direction("arrow.right", "Pan right") { cameraController.pan(.right) }
@@ -57,34 +56,20 @@ struct ContentView: View {
                     Spacer()
                     Text(cameraController.zoomLabel).font(.system(.subheadline, design: .monospaced)).monospacedDigit()
                 }
-                ZoomSlider(stops: cameraController.zoomStops, value: cameraController.displayedZoom, enabled: cameraController.isConnected) { cameraController.setZoom($0); state.selectedPreset = nil }
+                ZoomSlider(stops: cameraController.zoomStops, value: cameraController.displayedZoom, enabled: cameraController.isConnected) { cameraController.setZoom($0) }
                     .frame(height: 26)
                 HStack {
-                    Button { cameraController.zoom(.out); state.selectedPreset = nil } label: {
+                    Button { cameraController.zoom(.out) } label: {
                         Image(systemName: "minus.magnifyingglass").frame(maxWidth: .infinity, minHeight: 25)
                     }.accessibilityLabel("Zoom out")
-                    Button { cameraController.zoom(.in); state.selectedPreset = nil } label: {
+                    Button { cameraController.zoom(.in) } label: {
                         Image(systemName: "plus.magnifyingglass").frame(maxWidth: .infinity, minHeight: 25)
                     }.accessibilityLabel("Zoom in")
                 }.buttonStyle(.bordered).disabled(!cameraController.isConnected || cameraController.currentZoom == nil)
             }
             Divider()
-            HStack {
-                Text("Presets").font(.subheadline)
-                Spacer()
-                Button(state.memoryMode ? "Choose slot…" : "M") { state.memoryMode.toggle() }
-                    .tint(state.memoryMode ? .orange : .gray)
-                    .help("Save the current framing: click M, then a preset number")
-                    .accessibilityLabel("Save preset mode")
-                    .disabled(!canMove)
-            }
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 6) {
-                ForEach(1...8, id: \.self) { slot in
-                    Button { preset(slot) } label: { Text("\(slot)").frame(maxWidth: .infinity, minHeight: 25) }
-                        .tint(state.selectedPreset == slot ? .green : .gray)
-                        .help(state.memoryMode ? "Save preset \(slot)" : "Recall preset \(slot)")
-                        .disabled(!canMove)
-                }
+            DisclosureGroup("Image controls") {
+                ScrollView { ImageControlsView().padding(.top, 8) }.frame(height: 240)
             }
             Button("Stop") { cameraController.stop() }
                 .frame(maxWidth: .infinity)
@@ -99,24 +84,18 @@ struct ContentView: View {
             }.frame(minHeight: 32)
         }
         .padding(12).frame(width: 260)
+        }
+        .frame(width: 260, height: min(640, (NSScreen.main?.visibleFrame.height ?? 720) - 80))
         .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $state.showingSettings) { SettingsView().environmentObject(cameraController) }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in cameraController.shutdown() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didResignActiveNotification)) { _ in cameraController.stop() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in cameraController.refreshZoom() }
-        .onChange(of: cameraController.selectedCameraIndex) { _, _ in state.selectedPreset = nil; state.memoryMode = false }
         .onDisappear { cameraController.stop() }
         .onAppear { cameraController.refreshZoom() }
     }
     private func direction(_ image: String, _ label: String, action: @escaping () -> Void) -> some View {
-        Button { state.selectedPreset = nil; action() } label: { Image(systemName: image).frame(width: 54, height: 28) }
+        Button { action() } label: { Image(systemName: image).frame(width: 54, height: 28) }
             .help(label).accessibilityLabel(label)
-    }
-    private func preset(_ slot: Int) {
-        if state.memoryMode {
-            cameraController.savePreset(slot) { ok in if ok { state.memoryMode = false; state.selectedPreset = slot } }
-        } else {
-            cameraController.gotoPreset(slot) { ok in if ok { state.selectedPreset = slot } }
-        }
     }
 }

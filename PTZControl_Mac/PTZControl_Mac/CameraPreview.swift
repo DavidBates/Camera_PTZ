@@ -9,7 +9,7 @@ final class PreviewCaptureWorker: @unchecked Sendable {
     private let queue = DispatchQueue(label: "dev.magician.ptz.preview")
     private var selectedID: String?
     private var registryID: UInt64?
-    func update(camera: Camera?, run: Bool, completion: @escaping @Sendable (String?) -> Void) {
+    func update(camera: Camera?, run: Bool, widescreen: Bool = false, completion: @escaping @Sendable (String?) -> Void) {
         queue.async { [self] in
             guard run, let camera else {
                 if session.isRunning { session.stopRunning() }
@@ -38,7 +38,7 @@ final class PreviewCaptureWorker: @unchecked Sendable {
                     if session.isRunning { session.stopRunning() }
                     session.beginConfiguration(); selectedID = nil
                     for input in session.inputs { session.removeInput(input) }
-                    if session.canSetSessionPreset(.medium) { session.sessionPreset = .medium }
+
                     let input: AVCaptureDeviceInput
                     do { input = try AVCaptureDeviceInput(device: device) }
                     catch { session.commitConfiguration(); throw error }
@@ -48,6 +48,14 @@ final class PreviewCaptureWorker: @unchecked Sendable {
                     }
                     session.addInput(input); session.commitConfiguration(); selectedID = device.uniqueID
                     print("[Preview] matched \(device.localizedName) UID=\(device.uniqueID)")
+                }
+                let preset: AVCaptureSession.Preset = widescreen ? .hd1280x720 : .vga640x480
+                if session.sessionPreset != preset {
+                    guard session.canSetSessionPreset(preset) else {
+                        if session.isRunning { session.stopRunning() }
+                        completion("Selected preview format unavailable. Choose another format."); return
+                    }
+                    session.beginConfiguration(); session.sessionPreset = preset; session.commitConfiguration()
                 }
                 if !session.isRunning { session.startRunning() }
                 completion(session.isRunning ? nil : "Preview could not start. Try turning it off and on.")
@@ -62,6 +70,7 @@ final class PreviewModel: ObservableObject {
     @Published var message: String? = "Preview paused"
     let worker = PreviewCaptureWorker()
     private var camera: Camera?
+    private var widescreen = false
     private var enabled = true
     private var pauseWhenInactive = true
     private var active = false
@@ -81,8 +90,8 @@ final class PreviewModel: ObservableObject {
             Task { @MainActor [weak self] in self?.reconcile() }
         })
     }
-    func configure(camera: Camera?, enabled: Bool, pause: Bool) {
-        self.camera = camera; self.enabled = enabled; pauseWhenInactive = pause; reconcile()
+    func configure(camera: Camera?, enabled: Bool, pause: Bool, widescreen: Bool) {
+        self.widescreen = widescreen; self.camera = camera; self.enabled = enabled; pauseWhenInactive = pause; reconcile()
     }
     func activityChanged(_ value: Bool) { guard active != value else { return }; active = value; reconcile() }
     func stop() { enabled = false; reconcile() }
@@ -107,7 +116,7 @@ final class PreviewModel: ObservableObject {
             worker.stop(); return
         }
         message = "Starting preview…"
-        worker.update(camera: camera, run: true) { [weak self] result in
+        worker.update(camera: camera, run: true, widescreen: widescreen) { [weak self] result in
             Task { @MainActor [weak self] in
                 guard let self, self.revision == token else { return }
                 self.message = result
@@ -163,6 +172,7 @@ struct CameraPreviewPanel: View {
     let camera: Camera?
     let enabled: Bool
     let pauseWhenInactive: Bool
+    let widescreen: Bool
     @StateObject private var model = PreviewModel()
     var body: some View {
         ZStack {
@@ -180,10 +190,11 @@ struct CameraPreviewPanel: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .onAppear { configure() }
         .onChange(of: camera) { _, _ in configure() }
+        .onChange(of: widescreen) { _, _ in configure() }
         .onChange(of: enabled) { _, _ in configure() }
         .onChange(of: pauseWhenInactive) { _, _ in configure() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in model.stop() }
         .onDisappear { model.stop() }
     }
-    private func configure() { model.configure(camera: camera, enabled: enabled, pause: pauseWhenInactive) }
+    private func configure() { model.configure(camera: camera, enabled: enabled, pause: pauseWhenInactive, widescreen: widescreen) }
 }

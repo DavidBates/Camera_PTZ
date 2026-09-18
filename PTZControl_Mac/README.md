@@ -1,3 +1,44 @@
+# Image controls — version 1.3
+
+Run `Build/PTZControl_Mac 1.3.app` after quitting the older menu bar app with its power button.
+The prior app is retained in Build; the updated ZIP also contains version 1.3.
+All current source edits are in this project.
+
+Position presets and their experimental setting have been removed. Expand **Image controls**
+in the menu panel, or open Settings with the gear button for a larger view:
+
+- Brightness, contrast and color intensity (saturation).
+- Autofocus toggle and manual focus slider. Turn Auto off before moving the slider.
+- Auto white balance and manual color temperature in Kelvin.
+- Anti-flicker: Off, 50 Hz or 60 Hz.
+- Restore defaults: restores the reported image defaults without changing PTZ.
+- Preview format: Standard (640×480, 4:3) or Widescreen (1280×720, 16:9).
+  This is AVFoundation capture format selection for this app's preview only, not a
+  verified camera-wide aspect-ratio command. Meeting applications choose their own format.
+
+Sliders write on release, use camera-reported ranges and resolution, and read back the
+result. Manual controls are disabled while their Auto setting is enabled. Unsupported
+controls are labeled unavailable. Refresh re-reads values changed by another application.
+The menu panel scrolls to remain usable on smaller displays.
+
+The physical CC3000e read-only probe confirmed all eight image controls, including
+manual and automatic focus. Brightness, contrast, saturation and focus report 0–255;
+white balance reports 2000–7500 K. Auto modes were on; anti-flicker was 60 Hz.
+No image settings or camera preset slots were changed during verification.
+
+Validation: native arm64 build and strict signature verification passed; 41 protocol
+checks passed. Fake-transport tests cover signed brightness, discovered unit routing,
+auto/manual interlocks, SET/readback and partial default-restore failures. Actual image
+writes and visual preview-format switching still need a user test; desktop automation timed out.
+See `Diagnostics/image-controls-readonly.log` and `Tests/protocol-test-results.log`.
+
+Protocol references (wire mappings only; no Linux APIs are used):
+https://github.com/torvalds/linux/blob/master/drivers/media/usb/uvc/uvc_ctrl.c
+https://github.com/torvalds/linux/blob/master/include/uapi/linux/usb/video.h
+https://github.com/soyersoyer/cameractrls
+
+## Earlier implementation notes (historical)
+
 # Menu bar update — version 1.2
 
 Authoritative project: `/Users/david.bates/Projects/GitHub/Camera_PTZ/PTZControl_Mac`.

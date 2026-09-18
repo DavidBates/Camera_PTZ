@@ -7,7 +7,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack(spacing: 0) {
-            HStack { Text("Settings").font(.title2.bold()); Spacer(); Text("PTZ Control 1.2").foregroundStyle(.secondary).font(.caption) }.padding()
+            HStack { Text("Settings").font(.title2.bold()); Spacer(); Text("PTZ Control 1.3").foregroundStyle(.secondary).font(.caption) }.padding()
             Divider()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
@@ -61,13 +61,7 @@ struct SettingsView: View {
                                 .font(.caption).foregroundStyle(.secondary)
                         }.frame(maxWidth: .infinity, alignment: .leading).padding(6)
                     }
-                    GroupBox("Presets") {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Toggle("Try CC3000e hardware presets", isOn: $cameraController.experimentalHardwarePresets)
-                            Text("Experimental: M followed by a number saves over that camera slot. A number recalls it. Check that recall returns to the saved framing; USB success alone does not prove preset support.")
-                                .font(.caption).foregroundStyle(.secondary)
-                        }.frame(maxWidth: .infinity, alignment: .leading).padding(6)
-                    }
+                    GroupBox("Image controls") { ImageControlsView().padding(6) }
                     GroupBox("Camera & diagnostics") {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(cameraController.selectedCameraName ?? "No camera connected").font(.subheadline)

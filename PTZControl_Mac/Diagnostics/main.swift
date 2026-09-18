@@ -8,6 +8,9 @@ guard cameras.count == 1 else {
 let camera = CC3000eController()
 do {
     try camera.connect(cameras[0])
+    for state in camera.readImageControls() {
+        print("IMAGE \(state.control.title): current=\(state.current) range=\(state.minimum)...\(state.maximum) step=\(state.resolution) writable=\(state.writable) default=\(String(describing: state.defaultValue))")
+    }
     // Default is read-only. Each optional movement must be explicitly requested.
     if arguments.contains("--zoom-in") { try camera.zoom(.in) }
     if arguments.contains("--zoom-out") { try camera.zoom(.out) }

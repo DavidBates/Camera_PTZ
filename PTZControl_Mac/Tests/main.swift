@@ -13,7 +13,7 @@ func fixture(bitmap: UInt8 = 0x1a) -> [UInt8] {
     d[2] = UInt8(d.count); return d
 }
 struct Packet { let type: UInt8; let request: UInt8; let value: UInt16; let index: UInt16; let bytes: [UInt8] }
-final class FakeUSB: USBTransport {
+class FakeUSB: USBTransport {
     var data = fixture()
     var packets: [Packet] = []
     var zoom: UInt16 = 100
@@ -44,10 +44,40 @@ final class FakeUSB: USBTransport {
         return (0,UInt32(bytes.count))
     }
 }
-final class MemoryStore: PTZPresetStore {
-    var values: [String: Data] = [:]
-    func save(_ data: Data, key: String) { values[key] = data }
-    func load(key: String) -> Data? { values[key] }
+final class ImageUSB: FakeUSB {
+    var values: [ImageControl: Int] = [.brightness: 0, .contrast: 20, .saturation: 20, .whiteBalance: 4500, .autoWhiteBalance: 1, .focus: 10, .autoFocus: 1, .antiFlicker: 2]
+    var failBrightness = false
+    override init() {
+        super.init()
+        // CT: focus absolute bit 5 + autofocus bit 17. PU: all requested controls.
+        data[33] |= 0x20; data[35] |= 2
+        data.replaceSubrange(36..<45, with: [10,0x24,5,4,3,0,0,2,0x4b,0x14])
+        data[2] = UInt8(data.count)
+    }
+    override func request(type: UInt8, request: UInt8, value: UInt16, index: UInt16, bytes: inout [UInt8]) -> (Int32, UInt32) {
+        guard let kind = ImageControl.allCases.first(where: { $0.selector == UInt8(value >> 8) && index == ($0.terminal ? 0x0302 : 0x0402) }) else {
+            return super.request(type: type, request: request, value: value, index: index, bytes: &bytes)
+        }
+        packets.append(Packet(type: type, request: request, value: value, index: index, bytes: bytes))
+        if request == 0x86 {
+            let automatic = kind.autoPartner.map { values[$0] == 1 } ?? false
+            bytes = [automatic ? 7 : 3]
+        } else if request == 1 {
+            if kind == .brightness && failBrightness { return (Int32(bitPattern: 0xe00002ed), 0) }
+            values[kind] = kind.decode(bytes)
+        } else {
+            let v: Int
+            switch request {
+            case 0x82: v = kind == .brightness ? -64 : kind == .whiteBalance ? 2000 : 0
+            case 0x83: v = kind == .brightness ? 64 : kind == .whiteBalance ? 6500 : 100
+            case 0x84: v = 1
+            case 0x87: v = kind.isAuto ? 1 : kind == .whiteBalance ? 4500 : kind == .antiFlicker ? 2 : 0
+            default: v = values[kind] ?? 0
+            }
+            bytes = kind.encode(v)
+        }
+        return (0, UInt32(bytes.count))
+    }
 }
 let camera = Camera(id:1,name:"CC3000e test fixture",vendor:0x046d,product:0x0848,location:1)
 do {
@@ -59,7 +89,7 @@ do {
     do { _ = try UVCDescriptors(malformed); check(false,"reject zero length descriptor") } catch { check(true,"reject zero length descriptor") }
     var truncated = fixture(); truncated.removeLast(); truncated[2] = UInt8(truncated.count)
     do { _ = try UVCDescriptors(truncated); check(false,"reject truncated XU") } catch { check(true,"reject truncated XU") }
-    let usb = FakeUSB(); let c = CC3000eController(transport:usb, presetStore:MemoryStore())
+    let usb = FakeUSB(); let c = CC3000eController(transport:usb)
     try c.connect(camera)
     check(!usb.packets.contains { $0.request == 1 }, "connect and probing never move camera")
     check(usb.packets.filter { $0.value == 0xb00 }.allSatisfy { $0.index == 0x0302 }, "entity high byte / interface low byte")
@@ -92,16 +122,6 @@ do {
     check(usb.zoom == 105, "arbitrary zoom targets quantize to device resolution")
     try c.setZoom(9000)
     check(usb.zoom == 200, "arbitrary zoom target clamps to device maximum")
-    usb.packets = []; c.experimentalHardwarePresets = true
-    try c.savePreset(1)
-    check(usb.packets.contains { $0.index == 0x0902 && $0.value == 0x0200 && $0.bytes == [4] }, "experimental CC3000e save slot 1 uses one-byte 04")
-    usb.packets = []; try c.recallPreset(1)
-    check(usb.packets.contains { $0.index == 0x0902 && $0.value == 0x0200 && $0.bytes == [12] }, "experimental CC3000e recall slot 1 uses one-byte 0C")
-    c.experimentalHardwarePresets = false
-    usb.packets = []; try c.savePreset(8)
-    check(!usb.packets.contains { $0.index == 0x0902 && $0.value == 0x200 },"CC3000e does not guess hardware preset support")
-    try c.recallPreset(8)
-    check(usb.packets.contains { $0.request == 1 && $0.value == 0xd00 },"software preset restores absolute position")
     let noControls = FakeUSB(); noControls.data = fixture(bitmap:0)
     let empty = CC3000eController(transport:noControls); try empty.connect(camera)
     check(!noControls.packets.contains { $0.index == 0x0302 },"unadvertised CT controls are not probed")
@@ -110,5 +130,35 @@ do {
     let wrong = CC3000eController(transport:wrongLength); try wrong.connect(camera); wrongLength.packets = []; try wrong.home()
     check(!wrongLength.packets.contains { $0.value == 0x200 && $0.request == 1 },"unexpected XU length never written")
 } catch { failures += 1; print("UNEXPECTED: \(error)") }
+do {
+    let usb = ImageUSB()
+    let c = CC3000eController(transport: usb); try c.connect(camera)
+    let controls = c.readImageControls()
+    check(controls.count == 8, "all eight advertised image controls discovered")
+    check(controls.first { $0.control == .focus }?.writable == false, "manual focus remains visible while autofocus disables writes")
+    usb.packets = []
+    do { try c.setImageControl(.focus, value: 30); check(false, "manual focus rejected while auto is on") }
+    catch { check(!usb.packets.contains { $0.request == 1 }, "manual focus rejected without writing while auto is on") }
+    try c.setImageControl(.autoFocus, value: 0)
+    try c.setImageControl(.focus, value: 30)
+    check(usb.packets.contains { $0.request == 1 && $0.index == 0x0302 && $0.value == 0x0600 && $0.bytes == [30,0] }, "manual focus addresses discovered camera terminal")
+    try c.setImageControl(.brightness, value: -20)
+    check(usb.packets.contains { $0.request == 1 && $0.index == 0x0402 && $0.value == 0x0200 && $0.bytes == [236,255] }, "brightness addresses processing unit with signed payload")
+    usb.packets = []; try c.restoreImageDefaults()
+    check(usb.values[.autoFocus] == 1 && usb.values[.autoWhiteBalance] == 1, "restore returns automatic modes to camera defaults")
+    check(!usb.packets.contains { $0.request == 1 && ($0.index == 0x0902 || $0.value == 0x0b00 && $0.index == 0x0302 || $0.value == 0x0e00) }, "restore image defaults never changes PTZ or vendor presets")
+    usb.failBrightness = true
+    do { try c.restoreImageDefaults(); check(false, "partial restore failure surfaced") }
+    catch { check(usb.values[.autoFocus] == 1, "partial restore failure surfaced while auto modes still restored") }
+} catch { failures += 1; print("IMAGE TEST ERROR: \(error)") }
+// Signed UVC brightness and control routing must not be confused with zoom/XU selectors.
+check(ImageControl.brightness.decode([0xff,0xff]) == -1, "brightness decodes signed little endian")
+check(ImageControl.brightness.encode(-128) == [128,255], "negative brightness encoding")
+check(ImageControl.focus.selector == 6 && ImageControl.focus.bit == 5 && ImageControl.focus.terminal, "manual focus uses CT selector 6, bitmap bit 5")
+check(ImageControl.autoFocus.selector == 8 && ImageControl.autoFocus.bit == 17, "autofocus uses CT selector 8, bitmap bit 17")
+check(ImageControl.antiFlicker.encode(2) == [2], "60 Hz uses one-byte 02")
+check(ImageControl.whiteBalance.encode(4500) == [148,17], "Kelvin uses unsigned two-byte payload")
+let imageRange = ImageControlState(control: .brightness, current: 0, minimum: -64, maximum: 64, resolution: 2, defaultValue: 0, writable: true)
+check(imageRange.clamped(-999) == -64 && imageRange.clamped(999) == 64 && imageRange.clamped(3) == 2, "signed image range clamps and quantizes")
 print("Protocol tests: \(failures) failures")
 exit(failures == 0 ? 0 : 1)

@@ -19,19 +19,10 @@ protocol PTZCameraController: AnyObject, Sendable {
     func readZoom() throws -> ZoomState
     func setZoom(_ value: Int) throws
     var supportedMovementSpeeds: ClosedRange<Int>? { get }
-    var experimentalHardwarePresets: Bool { get set }
     func stop() throws
     func home() throws
-    func savePreset(_ slot: Int) throws
-    func recallPreset(_ slot: Int) throws
+    func readImageControls() -> [ImageControlState]
+    func setImageControl(_ control: ImageControl, value: Int) throws
+    func restoreImageDefaults() throws
     func diagnosticReport() -> String
-}
-
-protocol PTZPresetStore {
-    func save(_ data: Data, key: String)
-    func load(key: String) -> Data?
-}
-struct DefaultsPresetStore: PTZPresetStore {
-    func save(_ data: Data, key: String) { UserDefaults.standard.set(data, forKey: key) }
-    func load(key: String) -> Data? { UserDefaults.standard.data(forKey: key) }
 }

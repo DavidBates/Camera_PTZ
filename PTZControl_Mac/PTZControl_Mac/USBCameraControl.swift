@@ -2,10 +2,9 @@ import Foundation
 
 // All calls are made on CameraController's serial USB queue (also used by the diagnostic CLI).
 final class CC3000eController: PTZCameraController, @unchecked Sendable {
-    private let presetStore: PTZPresetStore
     private let transport: USBTransport
     private var connected = false
-    init(transport: USBTransport = IOKitUSBTransport(), presetStore: PTZPresetStore = DefaultsPresetStore()) { self.transport = transport; self.presetStore = presetStore }
+    init(transport: USBTransport = IOKitUSBTransport()) { self.transport = transport }
     private var camera: Camera?
     private var descriptors: UVCDescriptors?
     private var log: [String] = []
@@ -20,11 +19,6 @@ final class CC3000eController: PTZCameraController, @unchecked Sendable {
     private var moving = false
     private(set) var supportedMovementSpeeds: ClosedRange<Int>?
     var speed: UInt8 = 1
-    var experimentalHardwarePresets = false
-    // CC3000e is absent from cameractrls' preset allowlist. Use software positions
-    // when GET_CUR/SET_CUR absolute controls exist; never guess vendor preset support.
-    private let vendorPresetProducts: Set<UInt16> = [0x0853,0x0858,0x085f,0x0866,0x0881,0x0888,0x0889]
-
     static func discover() -> [Camera] {
         var identities = [PTZUSBIdentity](repeating: PTZUSBIdentity(), count: 64)
         let count = Int(PTZUSBEnumerate(&identities, 64))
@@ -134,10 +128,6 @@ final class CC3000eController: PTZCameraController, @unchecked Sendable {
         let state = try readZoom()
         try setZoom(state.current + (direction == .in ? state.resolution : -state.resolution))
     }
-    private var hardwarePresetsAvailable: Bool {
-        guard let camera, xuMode != nil else { return false }
-        return vendorPresetProducts.contains(camera.product) || (camera.product == 0x0848 && experimentalHardwarePresets)
-    }
     func pan(_ direction: PanDirection, milliseconds: Int, preferLogitech: Bool) throws { try move(x: direction == .left ? -1 : 1, y: 0, milliseconds: milliseconds, preferLogitech: preferLogitech) }
     func tilt(_ direction: TiltDirection, milliseconds: Int, preferLogitech: Bool) throws { try move(x: 0, y: direction == .up ? 1 : -1, milliseconds: milliseconds, preferLogitech: preferLogitech) }
     private func move(x: Int, y: Int, milliseconds: Int, preferLogitech: Bool) throws {
@@ -188,37 +178,70 @@ final class CC3000eController: PTZCameraController, @unchecked Sendable {
         else { throw PTZError.message("No verified home/reset control") }
         if let c = zoomControl { let value = try get(c,0x87); try set(c,value) }
     }
-    private func presetKey(_ slot: Int) throws -> String {
-        guard (1...8).contains(slot), let camera else { throw PTZError.message("Invalid preset or no camera") }
-        return "UVCPosition_\(camera.vendor)_\(camera.product)_\(camera.location)_\(slot)"
+    private func imageControl(_ kind: ImageControl) throws -> Control {
+        guard let descriptors else { throw PTZError.message("Camera disconnected") }
+        let units: [UVCEntity] = descriptors.entities.filter { $0.subtype == (kind.terminal ? 2 : 5) && $0.has(kind.bit) }
+        guard units.count == 1 else { throw PTZError.message("\(kind.title) unavailable or ambiguous") }
+        let info = try transfer(units[0], kind.selector, 0x86, [0])[0]
+        guard info & 1 != 0 else { throw PTZError.message("\(kind.title) cannot be read") }
+        return Control(entity: units[0], selector: kind.selector, length: kind.length, info: info)
     }
-    func savePreset(_ slot: Int) throws {
-        let key = try presetKey(slot)
-        try stop()
-        if hardwarePresetsAvailable, let c = xuMode {
-            try set(c,[UInt8(slot+3)])
-            record("Hardware preset \(slot) SAVE accepted; recall still requires physical verification")
-            return
+    private func imageState(_ kind: ImageControl) throws -> ImageControlState {
+        let c = try imageControl(kind)
+        let current = kind.decode(try get(c))
+        let low: Int, high: Int, resolution: Int
+        if kind.isAuto { low = 0; high = 1; resolution = 1 }
+        else if kind == .antiFlicker { low = 0; high = 2; resolution = 1 }
+        else {
+            low = kind.decode(try get(c, 0x82)); high = kind.decode(try get(c, 0x83))
+            resolution = Int(try get(c, 0x84).le16(0))
         }
-        guard let p = absolute, let z = zoomControl else { throw PTZError.message("Hardware presets unverified for CC3000e; software presets need readable absolute pan/tilt and zoom") }
-        let position = try get(p) + get(z)
-        presetStore.save(Data(position), key: key)
-        record("Saved software preset \(slot) for this USB location")
+        guard low <= high, resolution > 0, current >= low, current <= high else {
+            throw PTZError.message("Invalid range for \(kind.title)")
+        }
+        let def = (try? get(c, 0x87)).map { kind.decode($0) }
+        return ImageControlState(control: kind, current: current, minimum: low, maximum: high,
+            resolution: resolution, defaultValue: def.flatMap { (low...high).contains($0) ? $0 : nil },
+            writable: c.info & 2 != 0 && c.info & 4 == 0)
     }
-    func recallPreset(_ slot: Int) throws {
-        let key = try presetKey(slot)
-        try stop()
-        if hardwarePresetsAvailable, let c = xuMode {
-            try set(c,[UInt8(slot+11)])
-            record("Hardware preset \(slot) RECALL accepted")
-            return
+    func readImageControls() -> [ImageControlState] {
+        ImageControl.allCases.compactMap { kind in
+            do { return try imageState(kind) }
+            catch { record("Image control \(kind.title): \(error.localizedDescription)"); return nil }
         }
-        guard let p = absolute, let z = zoomControl, let stored = presetStore.load(key: key), stored.count == 10 else { throw PTZError.message("No software preset saved, or absolute controls unavailable") }
-        let bytes = Array(stored)
-        let low = try get(p,0x82), high = try get(p,0x83)
-        for i in [0,4] { guard bytes.le32(i) >= low.le32(i), bytes.le32(i) <= high.le32(i) else { throw PTZError.message("Saved preset outside current range") } }
-        let zl = try get(z,0x82).le16(0), zh = try get(z,0x83).le16(0)
-        guard bytes.le16(8) >= zl, bytes.le16(8) <= zh else { throw PTZError.message("Saved zoom outside range") }
-        try set(p,Array(bytes.prefix(8))); try set(z,Array(bytes.suffix(2)))
+    }
+    func setImageControl(_ kind: ImageControl, value: Int) throws {
+        if let auto = kind.autoPartner, let state = try? imageState(auto), state.current != 0 {
+            throw PTZError.message("Turn off \(auto.title) before adjusting \(kind.title.lowercased())")
+        }
+        let state = try imageState(kind), c = try imageControl(kind)
+        guard state.writable else { throw PTZError.message("\(kind.title) is currently automatic or read-only") }
+        let target = state.clamped(value)
+        try set(c, kind.encode(target))
+        let actual = kind.decode(try get(c))
+        record("\(kind.title) target=\(target) readback=\(actual)")
+        guard actual == target else { throw PTZError.message("\(kind.title): camera reports \(actual), requested \(target)") }
+    }
+    func restoreImageDefaults() throws {
+        // Reset only image settings. Do not move the camera, reset USB or touch zoom.
+        let initial = readImageControls()
+        var failures: [String] = []
+        for kind in [ImageControl.brightness, .contrast, .saturation, .antiFlicker] {
+            guard let state = initial.first(where: { $0.control == kind }), state.writable, let value = state.defaultValue else { continue }
+            do { try setImageControl(kind, value: value) } catch { failures.append(error.localizedDescription) }
+        }
+        for (manual, auto) in [(ImageControl.focus, ImageControl.autoFocus), (.whiteBalance, .autoWhiteBalance)] {
+            let a = initial.first { $0.control == auto }
+            do {
+                if let a, a.writable { try setImageControl(auto, value: 0) }
+                if let m = try? imageState(manual), m.writable, let value = m.defaultValue { try setImageControl(manual, value: value) }
+            } catch { failures.append(error.localizedDescription) }
+            // Always restore the automatic mode, even after a manual write fails.
+            if let a, a.writable {
+                do { try setImageControl(auto, value: a.defaultValue ?? a.current) }
+                catch { failures.append(error.localizedDescription) }
+            }
+        }
+        if !failures.isEmpty { throw PTZError.message("Some image defaults failed: " + failures.joined(separator: "; ")) }
     }
 }

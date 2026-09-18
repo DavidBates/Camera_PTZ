@@ -1,19 +1,13 @@
-# Validation — version 1.1, 2026-09-17
+# Version 1.3 validation
 
-- Xcode 27.0, macOS SDK 27.0, deployment target macOS 14; native arm64 Debug build succeeded.
-- 30 protocol/descriptor/zoom-stop checks passed, zero failures. Tests cover experimental preset save/recall payloads, zoom rounding, clamping, endpoints and stop spacing using a fake USB transport.
-- Camera preview and USB control use separate serial queues. Preview uses video only and releases the input on pause.
-- Embedded permissions: App Sandbox, USB and Camera. No microphone permission, third-party runtime, Intel dependency or Rosetta.
-- Earlier physical testing verified descriptor discovery, zoom SET/readback (180 → 181 → 180), successful Logitech pan transfers and STOP. The user confirmed physical movement.
-- Actual device: 046d:0848, VideoControl interface 0, terminal 1, Logitech peripheral extension unit 11. Zoom range 100–1000, resolution 1. Relative movement speed is fixed at 1; absolute pan/tilt is not advertised.
-- Version 1.1 launched and read current zoom 100 (1×). Preview reached the macOS camera permission request; live frames and pause/resume require permission and physical verification.
-- CC3000e hardware presets remain experimental until a saved slot physically restores the framing. The user authorized slot 1 only. No other slots should be overwritten.
-
-## Quick acceptance check
-
-1. Allow Camera permission and confirm the preview. Switch to another app, then back: preview should pause and resume.
-2. Try zoom plus/minus and the slider. Settings → Zoom level also accepts a number. Change slider stops and confirm both slider and buttons use that spacing.
-3. Enable experimental CC3000e presets. At the desired framing, press M then 1. Move slightly, then press 1; visually check pan, tilt and zoom restoration. Preserve all other slots.
-4. Check Home and Stop, then camera controls while your meeting app uses the camera. If a command fails, copy the diagnostic log from Settings.
-
-The initial agent-sandbox resource error in the older probe log is historical; the normally launched app subsequently communicated successfully. The downloadable ZIP is a local ad-hoc signed build, not a notarized release.
+- Native arm64 Xcode build: succeeded.
+- Strict app signature verification: passed.
+- Protocol tests: 41 passed, zero failures.
+- Physical read-only CC3000e probe: all eight image controls available. See Diagnostics/image-controls-readonly.log.
+- Brightness/contrast/saturation: 0–255, current and default 128.
+- Focus: 0–255, current 30, default 0; autofocus on.
+- White balance: 2000–7500 K, current 7500, default 4000; Auto on.
+- Anti-flicker: current/default 2 (60 Hz).
+- No physical image SET requests, preset writes or movement were performed during this update.
+- Visual UI testing was blocked by desktop automation timeout. Quit the older app, run Build/PTZControl_Mac 1.3.app, then test each control and the preview formats. Turn Auto off before testing manual focus/white balance; turn it back on afterward if desired.
+- Restore defaults intentionally excludes pan, tilt and zoom. Aspect ratio is preview-only.
