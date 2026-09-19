@@ -35,8 +35,8 @@ struct ImageControlsView: View {
                 Spacer()
                 Button("Restore defaults") { cameraController.restoreImageDefaults() }
                     .disabled(cameraController.imageControls.isEmpty)
-            }.disabled(!cameraController.isConnected || cameraController.isBusy)
-            Text("Image settings affect the camera. Restore defaults leaves pan, tilt and zoom unchanged.")
+            }.disabled(!cameraController.canControl || cameraController.isBusy)
+            Text(cameraController.isDemoMode ? "Demo settings affect only the illustration. Focus blur and color are simulated; anti-flicker is a sample setting." : "Image settings affect the camera. Restore defaults leaves pan, tilt and zoom unchanged.")
                 .font(.caption2).foregroundStyle(.secondary)
         }
     }

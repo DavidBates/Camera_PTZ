@@ -11,14 +11,14 @@ struct ContentView: View {
     @EnvironmentObject var cameraController: CameraController
     @StateObject private var state = PTZViewState()
     @State private var contentHeight: CGFloat = 1
-    private var canMove: Bool { cameraController.isConnected && !cameraController.isBusy && !state.showingSettings }
+    private var canMove: Bool { cameraController.canControl && !cameraController.isBusy && !state.showingSettings }
     var body: some View {
         ScrollView {
         VStack(spacing: 10) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("PTZ Control").font(.headline)
-                    Text(cameraController.selectedCameraName ?? "No camera")
+                    Text(cameraController.isDemoMode ? "Demo camera · simulated" : cameraController.selectedCameraName ?? "No camera connected")
                         .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
                 }
                 Spacer(minLength: 2)
@@ -29,12 +29,15 @@ struct ContentView: View {
                 Button { NSApplication.shared.terminate(nil) } label: { Image(systemName: "power") }
                     .help("Quit").accessibilityLabel("Quit")
             }
-            if cameraController.cameras.count > 1 {
+            CameraConnectionView()
+            if !cameraController.isDemoMode && cameraController.cameras.count > 1 {
                 Picker("Camera", selection: Binding(get: { cameraController.selectedCameraIndex }, set: { cameraController.selectCamera($0) })) {
                     ForEach(Array(cameraController.cameras.enumerated()), id: \.element.id) { index, camera in Text(camera.name).tag(index) }
                 }.disabled(cameraController.isBusy)
             }
-            if cameraController.showPreview {
+            if cameraController.isDemoMode && cameraController.showPreview {
+                DemoPreviewView()
+            } else if cameraController.showPreview && cameraController.isConnected {
                 CameraPreviewPanel(camera: cameraController.selectedCamera, enabled: true, pauseWhenInactive: cameraController.pausePreviewWhenInactive, widescreen: cameraController.previewWidescreen)
             }
             VStack(spacing: 6) {
@@ -57,7 +60,7 @@ struct ContentView: View {
                     Spacer()
                     Text(cameraController.zoomLabel).font(.system(.subheadline, design: .monospaced)).monospacedDigit()
                 }
-                ZoomSlider(stops: cameraController.zoomStops, value: cameraController.displayedZoom, enabled: cameraController.isConnected) { cameraController.setZoom($0) }
+                ZoomSlider(stops: cameraController.zoomStops, value: cameraController.displayedZoom, enabled: cameraController.canControl) { cameraController.setZoom($0) }
                     .frame(height: 26)
                 HStack {
                     Button { cameraController.zoom(.out) } label: {
@@ -66,7 +69,7 @@ struct ContentView: View {
                     Button { cameraController.zoom(.in) } label: {
                         Image(systemName: "plus.magnifyingglass").frame(maxWidth: .infinity, minHeight: 25)
                     }.accessibilityLabel("Zoom in")
-                }.buttonStyle(.bordered).disabled(!cameraController.isConnected || cameraController.currentZoom == nil)
+                }.buttonStyle(.bordered).disabled(!cameraController.canControl || cameraController.currentZoom == nil)
             }
             Divider()
             DisclosureGroup("Image controls") {
@@ -75,7 +78,7 @@ struct ContentView: View {
             Button("Stop") { cameraController.stop() }
                 .frame(maxWidth: .infinity)
                 .keyboardShortcut(.cancelAction)
-                .disabled(!cameraController.isConnected)
+                .disabled(!cameraController.canControl)
             HStack(alignment: .top, spacing: 5) {
                 if cameraController.isBusy { ProgressView().controlSize(.small) }
                 Text(cameraController.status)

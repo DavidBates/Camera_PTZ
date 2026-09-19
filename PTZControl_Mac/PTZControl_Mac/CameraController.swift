@@ -4,6 +4,10 @@ import AppKit
 
 @MainActor
 final class CameraController: ObservableObject {
+    @Published private(set) var isDemoMode = false
+    @Published private(set) var demoPan = 0.0
+    @Published private(set) var demoTilt = 0.0
+    var canControl: Bool { isConnected || isDemoMode }
     @Published var cameras: [Camera] = []
     @Published var selectedCameraIndex = 0
     @Published var useLogitechMotionControl = false
@@ -40,8 +44,35 @@ final class CameraController: ObservableObject {
         guard let z = currentZoom else { return "Zoom unavailable" }
         return String(format: "%.2f×", Double(displayedZoom) / Double(max(1,z.minimum)))
     }
+    func startDemo() {
+        guard !isBusy else { return }
+        generation += 1
+        zoomRefresh?.cancel()
+        pendingZoom = nil; zoomTarget = nil
+        isConnected = false; isDemoMode = true
+        demoPan = 0; demoTilt = 0
+        currentZoom = ZoomState(current: 100, minimum: 100, maximum: 1000, resolution: 1)
+        imageControls = Self.demoImageControls
+        availableSpeedRange = 1...1
+        lastActionFailed = false
+        status = "Demo ready — try pan, tilt, zoom and image controls."
+        probeLog = "Demo mode: simulated controls and illustration. No camera capture or USB commands."
+        let backend = backend
+        queue.async { backend.disconnect() }
+    }
+    private static var demoImageControls: [ImageControlState] {
+        ImageControl.allCases.map { kind in
+            let minimum = kind == .whiteBalance ? 2000 : 0
+            let maximum = kind.isAuto ? 1 : kind == .antiFlicker ? 2 : kind == .whiteBalance ? 7500 : 255
+            let value = kind.isAuto ? 1 : kind == .antiFlicker ? 2 : kind == .whiteBalance ? 4500 : 128
+            return ImageControlState(control: kind, current: value, minimum: minimum, maximum: maximum,
+                                     resolution: 1, defaultValue: value, writable: true)
+        }
+    }
     func discoverCameras() {
         guard !isBusy else { return }
+        isDemoMode = false; zoomRefresh?.cancel()
+        status = "Searching for a supported camera…"; lastActionFailed = false
         isBusy = true; isConnected = false; imageControls = []; currentZoom = nil; pendingZoom = nil; zoomTarget = nil; generation += 1
         let token = generation; let backend = backend; let filter = deviceFilter
         queue.async { [weak self] in
@@ -50,13 +81,14 @@ final class CameraController: ObservableObject {
             DispatchQueue.main.async {
                 guard let self, self.generation == token else { return }
                 self.cameras = found; self.selectedCameraIndex = 0; self.isBusy = false
-                if found.isEmpty { self.status = "No Logitech camera found" }
+                if found.isEmpty { self.status = "No suitable camera found. Connect a compatible camera or try Demo mode." }
                 else { self.selectCamera(0) }
             }
         }
     }
     func selectCamera(_ index: Int) {
         guard !isBusy, cameras.indices.contains(index) else { return }
+        isDemoMode = false
         generation += 1; pendingZoom = nil; zoomTarget = nil; currentZoom = nil; isConnected = false
         selectedCameraIndex = index
         let camera = cameras[index]
@@ -88,10 +120,20 @@ final class CameraController: ObservableObject {
         }
     }
     func pan(_ direction: PanDirection) {
+        guard canControl else { return }
+        if isDemoMode {
+            demoPan = max(-1, min(1, demoPan + (direction == .right ? 0.1 : -0.1)))
+            status = "Demo: pan \(direction == .right ? "right" : "left")"; return
+        }
         let interval = motorIntervalTimer, xu = useLogitechMotionControl
         perform("Pan complete") { try $0.pan(direction, milliseconds: interval, preferLogitech: xu) }
     }
     func tilt(_ direction: TiltDirection) {
+        guard canControl else { return }
+        if isDemoMode {
+            demoTilt = max(-1, min(1, demoTilt + (direction == .up ? 0.1 : -0.1)))
+            status = "Demo: tilt \(direction == .up ? "up" : "down")"; return
+        }
         let interval = motorIntervalTimer, xu = useLogitechMotionControl
         perform("Tilt complete") { try $0.tilt(direction, milliseconds: interval, preferLogitech: xu) }
     }
@@ -101,8 +143,12 @@ final class CameraController: ObservableObject {
         setZoom(displayed.adjacent(direction: direction, stopCount: zoomStopCount))
     }
     func setZoom(_ value: Int) {
-        guard isConnected, let z = currentZoom else { return }
+        guard canControl, let z = currentZoom else { return }
         let target = z.clamped(value)
+        if isDemoMode {
+            currentZoom = ZoomState(current: target, minimum: z.minimum, maximum: z.maximum, resolution: z.resolution)
+            status = "Demo: zoom \(zoomLabel)"; return
+        }
         pendingZoom = target; zoomTarget = target
         drainZoom()
     }
@@ -115,6 +161,7 @@ final class CameraController: ObservableObject {
         }) { try $0.setZoom(target) }
     }
     func refreshZoom() {
+        if isDemoMode { status = "Demo: zoom values refreshed"; return }
         guard isConnected, !isBusy else { return }
         perform("Ready") { _ in }
     }
@@ -125,12 +172,19 @@ final class CameraController: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: work)
     }
     func gotoHome(completion: ((Bool) -> Void)? = nil) {
+        guard canControl else { completion?(false); return }
+        if isDemoMode {
+            demoPan = 0; demoTilt = 0; setZoom(100)
+            status = "Demo: home — framing reset"; completion?(true); return
+        }
         pendingZoom = nil; zoomTarget = nil
         perform("Home command sent", completion: { [weak self] ok in
             if ok { self?.refreshZoomAfterRecall() }; completion?(ok)
         }) { try $0.home() }
     }
     func stop() {
+        if isDemoMode { status = "Demo: stopped — movement uses single steps"; return }
+        guard isConnected, !isDemoMode else { return }
         pendingZoom = nil; zoomTarget = nil
         let backend = backend; let token = generation
         queue.async { [weak self] in
@@ -146,17 +200,30 @@ final class CameraController: ObservableObject {
     }
     func shutdown() { zoomRefresh?.cancel(); let backend = backend; queue.sync { backend.disconnect() } }
     func refreshImageControls() {
+        if isDemoMode { status = "Demo: image controls refreshed"; return }
         guard isConnected else { return }
         perform("Image controls refreshed", refreshImage: true) { _ in }
     }
     func setImage(_ kind: ImageControl, value: Int) {
+        guard canControl else { return }
+        if isDemoMode {
+            imageControls = imageControls.map { state in
+                guard state.control == kind else { return state }
+                return ImageControlState(control: kind, current: state.clamped(value), minimum: state.minimum,
+                                         maximum: state.maximum, resolution: state.resolution,
+                                         defaultValue: state.defaultValue, writable: true)
+            }
+            status = "Demo: \(kind.title) updated"; return
+        }
         perform("\(kind.title) updated", refreshImage: true) { try $0.setImageControl(kind, value: value) }
     }
     func restoreImageDefaults() {
+        guard canControl else { return }
+        if isDemoMode { imageControls = Self.demoImageControls; status = "Demo: image defaults restored"; return }
         perform("Image defaults restored", refreshImage: true) { try $0.restoreImageDefaults() }
     }
     func probeCamera() {
-        guard !isBusy, let camera = selectedCamera else { return }
+        guard !isDemoMode, !isBusy, let camera = selectedCamera else { return }
         isProbing = true
         perform("Probe complete", refreshImage: true, completion: { [weak self] ok in self?.isConnected = ok }) { try $0.connect(camera) }
     }

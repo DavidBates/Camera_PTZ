@@ -55,11 +55,17 @@ The CC3000e is the camera this project was built around and tested with. Support
 ## Get started
 
 1. Download the app from the Mac App Store, or build the project in Xcode.
-2. Connect your CC3000e and launch PTZ Control.
+2. Launch PTZ Control. Connect your CC3000e for hardware controls, or choose **Try Demo mode** to explore without a camera.
 3. Click the camera icon in the menu bar. Allow Camera access if you want the live preview.
 4. Use the gear button to open Settings and make it your own.
 
 See the [project README](PTZControl_Mac/README.md) for build instructions, permissions, diagnostics and current validation details.
+
+## Try it without hardware
+
+When no suitable camera is connected, the panel explains the CC3000e requirement and offers **Try Demo mode** and **Rescan**. Demo mode has a persistent label in the panel and Settings. Pan, tilt, zoom, Home and image adjustments operate on an illustrated simulated preview; no camera permission or hardware is needed. Focus and color effects are illustrative; anti-flicker is a sample setting.
+
+Choose **Exit demo & scan for camera** after connecting a CC3000e. Demo values are discarded and are never applied to hardware.
 
 ## Privacy policy
 

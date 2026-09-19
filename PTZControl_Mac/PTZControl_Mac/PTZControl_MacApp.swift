@@ -32,6 +32,8 @@ final class MenuBarAppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelega
         controls.sizingOptions = [.preferredContentSize]
         popover.contentViewController = controls
         camera.discoverCameras()
+        // Make the menu-bar app and hardware-free entry point discoverable on launch.
+        DispatchQueue.main.async { [weak self] in self?.toggleControls() }
     }
 
     @objc private func toggleControls() {

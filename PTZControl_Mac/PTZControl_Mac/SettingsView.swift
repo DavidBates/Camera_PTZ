@@ -11,11 +11,12 @@ struct SettingsView: View {
             Divider()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
+                    CameraConnectionView()
                     GroupBox("Preview") {
                         VStack(alignment: .leading, spacing: 8) {
-                            Toggle("Show camera preview", isOn: $cameraController.showPreview)
+                            Toggle(cameraController.isDemoMode ? "Show simulated preview" : "Show camera preview", isOn: $cameraController.showPreview)
                             Toggle("Pause when the window is inactive", isOn: $cameraController.pausePreviewWhenInactive)
-                                .disabled(!cameraController.showPreview)
+                                .disabled(!cameraController.showPreview || cameraController.isDemoMode)
                             Text("Pausing releases this app’s video input. Camera movement controls remain available.")
                                 .font(.caption).foregroundStyle(.secondary)
                         }.frame(maxWidth: .infinity, alignment: .leading).padding(6)
@@ -64,11 +65,11 @@ struct SettingsView: View {
                     GroupBox("Image controls") { ImageControlsView().padding(6) }
                     GroupBox("Camera & diagnostics") {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text(cameraController.selectedCameraName ?? "No camera connected").font(.subheadline)
+                            Text(cameraController.isDemoMode ? "Demo camera · simulated" : cameraController.selectedCameraName ?? "No camera connected").font(.subheadline)
                             TextField("Camera name filter (blank for automatic)", text: $cameraController.deviceFilter)
                             HStack {
                                 Button("Rescan") { cameraController.discoverCameras() }
-                                Button("Probe Camera") { cameraController.probeCamera() }
+                                Button("Probe Camera") { cameraController.probeCamera() }.disabled(cameraController.isDemoMode || cameraController.selectedCamera == nil)
                                 Button("Copy Log") {
                                     NSPasteboard.general.clearContents()
                                     NSPasteboard.general.setString(cameraController.probeLog, forType: .string)
