@@ -19,8 +19,6 @@ struct CameraConnectionView: View {
                     Button("Try Demo mode") { cameraController.startDemo() }
                     Button("Rescan") { cameraController.discoverCameras() }
                 }.disabled(cameraController.isBusy)
-            } else {
-                Button("Try Demo mode") { cameraController.startDemo() }.disabled(cameraController.isBusy)
             }
         }
         .font(.caption)
